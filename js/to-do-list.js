@@ -24,6 +24,36 @@ window.ToDoList = {
 
 
     },
+
+    createItem: function(){
+        let description = $("#description-field").val();
+        let deadline = $("#deadline-field").val();
+
+
+        var requestBody={
+
+            description: descriptionValue,
+            deadline: deadlineValue
+
+        };
+
+        $.ajax({
+            url: ToDoList.API_URL,
+            method: "POST",
+            //MIME type
+            contentType: "application/json",
+            data: JSON.stringify(requestBody)
+
+
+        }).done(function() {
+            ToDoList.getItems();
+        })
+
+    },
+
+
+
+
     getItemTableRow: function(item){
         //spread
         var deadline = new Date(...item.deadline).toLocaleDateString("en");
@@ -37,8 +67,24 @@ window.ToDoList = {
             <td><a class="delete-item" data-id="$item.id" href="#"><i class="fas fa-trash-alt"></i></a></td>
         </tr>
 `
+    },
+
+    bindEvents: function () {
+
+        $("#create-item-form").submit(function (event){
+            event.preventDefault();
+
+            ToDoList.createItem();
+
+        })
+
     }
+
+
+
+
 
 }
 
-//ToDoList.getItems();
+ToDoList.getItems();
+ToDoList.bindEvents();
